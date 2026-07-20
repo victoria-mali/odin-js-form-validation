@@ -1,7 +1,7 @@
 {
-  "name": "template-repo",
+  "name": "odin-js-form-validation",
   "version": "1.0.0",
-  "description": "A template with Webpack, ESLint, Prettier",
+  "description": "A form validated only with JavaScript",
   "private": true,
   "scripts": {
     "dev": "webpack serve --mode development",
