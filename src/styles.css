@@ -1,0 +1,85 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+*:not(dialog) {
+  margin: 0;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+.container {
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+button {
+  margin-top: 20px;
+}
+
+input[type="email"],
+[type="text"],
+[type="password"] {
+  border: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #f2f2f2;
+  padding: 12px;
+  border-radius: 3px;
+}
+
+input:focus {
+    outline: none;
+}
+
+
+select {
+  border: none;
+  background-color: #f2f2f2;
+  padding: 12px;
+  border-radius: 3px;
+}
+
+/* error message styles */
+.error {
+  padding: 8px;
+  font-size: 80%;
+  color: white; 
+  background-color: #c13e3e;
+  border-radius: 0 0 5px 5px;
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}
