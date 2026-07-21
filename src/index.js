@@ -32,6 +32,10 @@ inputs.forEach((item) => {
   const input = item.input;
   const errorDiv = item.error;
   input.addEventListener("input", (e) => {
+    if (input === document.getElementById("password2")) {
+      showError(input, errorDiv);
+    }
+
     if (input.validity.valid) {
       errorDiv.classList.add("error-visibility");
       errorDiv.textContent = "";
@@ -59,39 +63,37 @@ function showError(input, errorDiv) {
     errorDiv.textContent =
       "You need to enter a valid email address e.g xxxxx@gmail.com";
   }
+  if (input === document.getElementById("password2")) {
+    let isMatching = checkPasswords();
+    console.log(isMatching);
+    if (isMatching === false) {
+      input.setCustomValidity("invalid");
+      errorDiv.textContent = "Passwords don't match";
+    }
+  }
+
   errorDiv.classList.remove("error-visibility");
 }
 
 function checkPasswords() {
   let password1 = form.password.value;
   let password2 = form.password2.value;
-  let errorDiv = document.querySelector(".confirm-password-error");
 
   let isMatching;
-  if (password1 != password2) {
-    isMatching = false;
-  } else {
+  if (password1 === password2) {
     isMatching = true;
+  } else {
+    isMatching = false;
   }
-
-  if (isMatching === false) {
-    errorDiv.classList.remove("error-visibility");
-    errorDiv.textContent = "Passwords don't match";
-  }
+  return isMatching;
 }
 
-form.addEventListener("submit", (e) => {
-
-    e.preventDefault();
-  checkPasswords();
-});
-
 function validate(input, errorDiv) {
-  const isValid = input.validity.valid;
+  let isValid = input.validity.valid;
   input.classList.toggle("invalid", !isValid);
   input.classList.toggle("valid", isValid);
   isValid
     ? errorDiv.classList.add("error-visibility")
     : errorDiv.classList.remove("error-visibility");
-  errorDiv.textContent = isValid ? "" : `Check your ${input.name}`;
+  errorDiv.textContent = isValid ? "" : `Check your input`;
 }
