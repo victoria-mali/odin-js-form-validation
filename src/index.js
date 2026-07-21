@@ -1,5 +1,5 @@
 import "./styles.css";
-//import { validatePostalCode, validatePostalCodes } from "postal-code-checker";
+import { validatePostalCode } from "postal-code-checker";
 
 const form = document.getElementById("form");
 
@@ -17,12 +17,10 @@ const inputs = [
     error: document.querySelector(".postal-error"),
   },
   {
-    name: "password",
     input: document.getElementById("password1"),
     error: document.querySelector(".password-error"),
   },
   {
-    name: "confirm password",
     input: document.getElementById("password2"),
     error: document.querySelector(".confirm-password-error"),
   },
@@ -33,6 +31,14 @@ inputs.forEach((item) => {
   const errorDiv = item.error;
 
   input.addEventListener("input", (e) => {
+    if (input === document.getElementById("country")) {
+      validateZip();
+    }
+
+    if (input === document.getElementById("postal-code")) {
+      validateZip();
+    }
+
     if (input === document.getElementById("password2")) {
       syncPasswordMatch();
       return;
@@ -54,6 +60,7 @@ inputs.forEach((item) => {
   });
   input.addEventListener("focus", (e) => {
     input.classList.remove("invalid", "valid");
+    showError(input, errorDiv)
   });
 
   input.addEventListener("blur", (e) => {
@@ -73,10 +80,33 @@ function showError(input, errorDiv) {
       "You need to enter a valid email address e.g xxxxx@gmail.com";
   }
   if (input.validity.customError) {
-    errorDiv.textContent = "The passwords don't match";
+    if (input === document.getElementById("password2")) {
+      errorDiv.textContent = "The passwords don't match";
+    }
+    if (input === document.getElementById("postal-code")) {
+      errorDiv.textContent =
+        "Your postal code doesn't match your selected country";
+    }
   }
 
   errorDiv.classList.remove("error-visibility");
+}
+
+function validateZip() {
+  let postalCodeInput = form.zip;
+  let postalCodeError = document.querySelector(".postal-error");
+  let country = form.country.value;
+  let zip = form.zip.value;
+  let isValid = validatePostalCode(country, zip);
+
+  postalCodeInput.setCustomValidity(isValid ? "" : "notValid");
+
+  if (
+    postalCodeInput.classList.contains("valid") ||
+    postalCodeInput.classList.contains("invalid")
+  ) {
+    validate(postalCodeInput, postalCodeError);
+  }
 }
 
 function checkPasswords() {
