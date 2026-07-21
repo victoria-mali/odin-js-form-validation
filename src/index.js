@@ -1,5 +1,5 @@
 import "./styles.css";
-// import { validatePostalCode, validatePostalCodes } from "postal-code-checker";
+//import { validatePostalCode, validatePostalCodes } from "postal-code-checker";
 
 const form = document.getElementById("form");
 
@@ -31,9 +31,18 @@ const inputs = [
 inputs.forEach((item) => {
   const input = item.input;
   const errorDiv = item.error;
+
   input.addEventListener("input", (e) => {
     if (input === document.getElementById("password2")) {
-      showError(input, errorDiv);
+      syncPasswordMatch();
+      return;
+    }
+
+    if (
+      input === document.getElementById("password1") ||
+      input === document.getElementById("password2")
+    ) {
+      syncPasswordMatch();
     }
 
     if (input.validity.valid) {
@@ -63,13 +72,8 @@ function showError(input, errorDiv) {
     errorDiv.textContent =
       "You need to enter a valid email address e.g xxxxx@gmail.com";
   }
-  if (input === document.getElementById("password2")) {
-    let isMatching = checkPasswords();
-    console.log(isMatching);
-    if (isMatching === false) {
-      input.setCustomValidity("invalid");
-      errorDiv.textContent = "Passwords don't match";
-    }
+  if (input.validity.customError) {
+    errorDiv.textContent = "The passwords don't match";
   }
 
   errorDiv.classList.remove("error-visibility");
@@ -79,13 +83,32 @@ function checkPasswords() {
   let password1 = form.password.value;
   let password2 = form.password2.value;
 
-  let isMatching;
   if (password1 === password2) {
-    isMatching = true;
+    return true;
   } else {
-    isMatching = false;
+    return false;
   }
-  return isMatching;
+}
+
+function syncPasswordMatch() {
+  const password2Input = document.getElementById("password2");
+  const password2Error = document.querySelector(".confirm-password-error");
+
+  const isMatching = checkPasswords();
+  password2Input.setCustomValidity(isMatching ? "" : "notMatching");
+
+  if (password2Input.validity.valid) {
+    password2Error.classList.add("error-visibility");
+    password2Error.textContent = "";
+  } else {
+    showError(password2Input, password2Error);
+  }
+  if (
+    password2Input.classList.contains("valid") ||
+    password2Input.classList.contains("invalid")
+  ) {
+    validate(password2Input, password2Error);
+  }
 }
 
 function validate(input, errorDiv) {
