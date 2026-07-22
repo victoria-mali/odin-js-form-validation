@@ -1,6 +1,8 @@
 import "./styles.css";
 import { validatePostalCode } from "postal-code-checker";
 
+const container = document.querySelector(".container");
+const success = document.querySelector(".success");
 const form = document.getElementById("form");
 
 const inputs = [
@@ -60,7 +62,9 @@ inputs.forEach((item) => {
   });
   input.addEventListener("focus", (e) => {
     input.classList.remove("invalid", "valid");
-    showError(input, errorDiv)
+    if (!errorDiv.classList.contains("error-visibility")) {
+      showError(input, errorDiv);
+    }
   });
 
   input.addEventListener("blur", (e) => {
@@ -150,3 +154,17 @@ function validate(input, errorDiv) {
     : errorDiv.classList.remove("error-visibility");
   errorDiv.textContent = isValid ? "" : `Check your input`;
 }
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const allValid = inputs.every((item) => item.input.validity.valid);
+
+  if (allValid) {
+    container.classList.add("error-visibility");
+    success.classList.remove("error-visibility");
+  } else {
+    inputs.forEach((item) => {
+      validate(item.input, item.error);
+    });
+  }
+});
