@@ -74,7 +74,14 @@ inputs.forEach((item) => {
 
 function showError(input, errorDiv) {
   if (input.validity.valueMissing) {
-    errorDiv.textContent = `You need to enter an ${input.name}`;
+    const label = document
+      .querySelector(`label[for="${input.id}"]`)
+      .textContent.toLowerCase();
+    if (label === "confirm password") {
+      errorDiv.textContent = "Please confirm your password";
+    } else {
+      errorDiv.textContent = `Please enter your ${label}`;
+    }
   }
   if (input.validity.tooShort) {
     errorDiv.textContent = `You need to enter at least ${input.minLength} characters`;
@@ -101,9 +108,13 @@ function validateZip() {
   let postalCodeError = document.querySelector(".postal-error");
   let country = form.country.value;
   let zip = form.zip.value;
-  let isValid = validatePostalCode(country, zip);
 
-  postalCodeInput.setCustomValidity(isValid ? "" : "notValid");
+  if (zip === "") {
+    postalCodeInput.setCustomValidity("");
+  } else {
+    let isValid = validatePostalCode(country, zip);
+    postalCodeInput.setCustomValidity(isValid ? "" : "notValid");
+  }
 
   if (
     postalCodeInput.classList.contains("valid") ||
@@ -152,7 +163,11 @@ function validate(input, errorDiv) {
   isValid
     ? errorDiv.classList.add("error-visibility")
     : errorDiv.classList.remove("error-visibility");
-  errorDiv.textContent = isValid ? "" : `Check your input`;
+  if (isValid) {
+    errorDiv.textContent = "";
+  } else {
+    showError(input, errorDiv);
+  }
 }
 
 form.addEventListener("submit", (e) => {
